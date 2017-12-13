@@ -1,5 +1,7 @@
 namespace Products.Migrations.ProductMigrations
 {
+    using Products.Controllers;
+    using Products.Models;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
@@ -15,18 +17,26 @@ namespace Products.Migrations.ProductMigrations
 
         protected override void Seed(Products.Models.ProductDbContext context)
         {
-            //  This method will be called after migrating to the latest version.
+            SeedCategoryProducts(context);
+        }
 
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data. E.g.
-            //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
+        private void SeedCategoryProducts(ProductDbContext context)
+        {
+            context.Categories.AddOrUpdate(c => c.CategoryName,
+                new Category[]
+                {
+                    new Category{
+                    CategoryName = "Plumbing",
+                    productsInCategory = new Product[]
+                    {
+                        new Product{Description = "stopper",
+                                     FirstStockedOn = DateTime.Now - new TimeSpan(364,2,0,0),
+                                        LastOrderDate = DateTime.Now - new TimeSpan(5,0,0),
+                                            QuantityInStock = 200,
+                                                UnitPrice = 0.20f } }
+
+                        }
+                });
         }
     }
 }
